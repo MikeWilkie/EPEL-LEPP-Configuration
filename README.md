@@ -1,7 +1,9 @@
 EPEL-LEPP-Configuration
 =======================
 
-Configuration files for, optimized for Magento:
+**Optimized for Magento**
+
+Configuration files for:
 
 1. Percona Server
 2. nginx
