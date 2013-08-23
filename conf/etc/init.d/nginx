@@ -28,7 +28,7 @@ if [ -f /etc/sysconfig/nginx ]; then
 fi
 
 prog=nginx
-nginx=${NGINX-/usr/sbin/nginx}
+nginx=${NGINX-/sbin/nginx}
 conffile=${CONFFILE-/etc/nginx/nginx.conf}
 lockfile=${LOCKFILE-/var/lock/subsys/nginx}
 pidfile=${PIDFILE-/var/run/nginx.pid}
