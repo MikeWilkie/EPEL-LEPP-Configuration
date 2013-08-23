@@ -123,6 +123,10 @@ echo -e "syntax enable\nlet g:solarized_termtrans=1\nif (&t_Co >= 256 || "'$TERM
 cp -r ~/.vim* /etc/skel/
 rm -rf /etc/skel/.gnome2
 mkdir ~/git
+cd ~/git
+```
+```
+git clone https://github.com/MikeWilkie/EPEL-LEPP-Configuration
 ```
 
 ##nginx
