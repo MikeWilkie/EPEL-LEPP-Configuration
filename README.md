@@ -339,7 +339,7 @@ chmod -R 755 /var/run/php-fpm
 ```
 ```
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php.ini /etc/
-cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php-fpm.d/www.conf /etc/php-fpm.d/
+cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php-fpm.d/domain.conf /etc/php-fpm.d/www.conf
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php-fpm.conf /etc/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/php-fpm /etc/init.d/
 cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/php.d/opcache.ini /etc/php.d/opcache.ini
