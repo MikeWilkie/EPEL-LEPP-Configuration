@@ -1,4 +1,4 @@
-EPEL-LEPP-Configuration
+﻿EPEL-LEPP-Configuration
 =======================
 
 ##Optimized for Magento
@@ -217,6 +217,7 @@ mkdir -p /etc/nginx/framework.d
 ```
 mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
 mv /etc/nginx/mime.types /etc/nginx/mime.types.bak
+mv /etc/nginx/fastcgi_params /etc/nginx/fastcgi_params.bak
 ```
 ```
 chmod 755 /var
@@ -239,6 +240,7 @@ echo -e "$USER ALL=(ALL) ALL" >> /etc/sudoers
 ```
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/nginx.conf /etc/nginx/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/mime.types /etc/nginx/
+cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/fastcgi_params /etc/nginx/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/conf.d/default.conf /etc/nginx/conf.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/conf.d/domain.conf /etc/nginx/conf.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/gzip.conf /etc/nginx/speed.d/
@@ -287,7 +289,6 @@ php-pear \
 yum install \
 php-gd \
 php-ioncube-loader \
-php-JsonSchema \
 php-magickwand \
 php-markdown \
 php-mbstring \
@@ -302,9 +303,6 @@ php-xml \
 ```
 ```
 yum install \
-php-pear-File \
-php-pear-File-CSV \
-php-pear-File-Util \
 php-pear-XML-Beautifier \
 php-pear-XML-Parser \
 php-pear-XML-SVG \
@@ -312,7 +310,6 @@ php-pear-XML-Serializer \
 php-pecl-geoip \
 php-pecl-igbinary \
 php-pecl-imagick \
-php-pecl-jsonc \
 php-pecl-lzf \
 php-pecl-memcache \
 php-pecl-pdflib \
