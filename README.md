@@ -447,8 +447,8 @@ redis \
 ```
 ```
 mv /etc/redis.conf /etc/redis.conf.bak
-mv /etc/init.d/redis /etc/init.d/redis
-cp -f ~/config/etc/redis.conf /etc/
+cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/redis /etc/init.d/redis
+cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/redis.conf /etc/
 ```
 ```
 chmod -R 755 /etc/init.d/redis
