@@ -137,6 +137,11 @@ git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 echo -e "\nexport PATH="'$PATH'":/root/git/depot_tools" >> ~/.bashrc
 ```
 ```
+cd ~/git/nginx
+wget http://www.openssl.org/source/openssl-1.0.1e.tar.gz
+tar xzvf openssl* && rm -rf openssl*
+```
+```
 mkdir ~/git/nginx
 cd nginx
 wget http://nginx.org/download/nginx-1.4.3.tar.gz
@@ -171,6 +176,7 @@ cd ~/git/nginx/nginx-1.4.3
 --http-log-path=/var/log/nginx/access.log \
 --user=nginx \
 --group=www-data \
+--with-openssl=$HOME/git/nginx/openssl-1.0.1e
 --with-google_perftools_module \
 --with-http_ssl_module \
 --with-http_secure_link_module \
