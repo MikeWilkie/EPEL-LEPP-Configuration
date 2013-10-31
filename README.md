@@ -176,7 +176,7 @@ cd ~/git/nginx/nginx-1.4.3
 --http-log-path=/var/log/nginx/access.log \
 --user=nginx \
 --group=www-data \
---with-openssl=$HOME/git/nginx/openssl-1.0.1e
+--with-openssl=$HOME/git/nginx/openssl-1.0.1e \
 --with-google_perftools_module \
 --with-http_ssl_module \
 --with-http_secure_link_module \
