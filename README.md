@@ -172,6 +172,7 @@ cd ~/git/nginx/nginx-1.4.3
 --user=nginx \
 --group=www-data \
 --with-google_perftools_module \
+--with-http_ssl_module \
 --with-http_secure_link_module \
 --with-http_geoip_module \
 --with-http_realip_module \
