@@ -158,7 +158,7 @@ tar -xzvf ngx_http_redis-0.3.6.tar.gz
 rm -rf ngx_http_redis-0.3.6.tar.gz
 ```
 ```
-cd ~/git/nginx/nginx-1.4.2
+cd ~/git/nginx/nginx-1.4.3
 ```
 ```
 ./configure \
