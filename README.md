@@ -139,16 +139,16 @@ echo -e "\nexport PATH="'$PATH'":/root/git/depot_tools" >> ~/.bashrc
 ```
 mkdir ~/git/nginx
 cd nginx
-wget http://nginx.org/download/nginx-1.4.2.tar.gz
-tar -xzvf nginx-1.4.2.tar.gz
-rm -rf nginx-1.4.2.tar.gz
+wget http://nginx.org/download/nginx-1.4.3.tar.gz
+tar -xzvf nginx-1.4.3.tar.gz
+rm -rf nginx-1.4.3.tar.gz
 ```
 ```
 git clone git://github.com/pagespeed/ngx_pagespeed.git
 cd ngx_pagespeed
-wget https://dl.google.com/dl/page-speed/psol/1.6.29.5.tar.gz
-tar -xzvf 1.6.29.5.tar.gz
-rm -rf 1.6.29.5.tar.gz
+wget https://dl.google.com/dl/page-speed/psol/1.6.29.7.tar.gz
+tar -xzvf 1.6.29.7.tar.gz
+rm -rf 1.6.29.7.tar.gz
 ```
 ```
 cd ~/git/nginx
