@@ -27,6 +27,7 @@ ln -s /usr/share/zoneinfo/$TZ /etc/localtime
 rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
 rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
+rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
 ```
 ```
 sed -i "s/enable=0/enable=1/" /etc/yum.repos.d/epel.repo
@@ -127,6 +128,12 @@ cd ~/git
 ```
 ```
 git clone https://github.com/MikeWilkie/EPEL-LEPP-Configuration
+```
+
+##openssl
+
+```
+yum --enablerepo=axivo update openssl
 ```
 
 ##nginx
@@ -351,7 +358,7 @@ cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/php.d/memcache.ini /etc/php.d/memca
 cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/php-fpm /etc/init.d/
 ```
 ```
-mv /etc/php-fpm.d/domain.conf /etc/php-fpm.d/$DOMAIN.conf
+mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/$DOMAIN.conf
 sed -i 's/$VAR_USER/$USER/' /etc/php-fpm.conf
 sed -i 's/$VAR_DOMAIN/$DOMAIN/' /etc/php-fpm.d/$DOMAIN.conf
 ```
@@ -420,7 +427,7 @@ memcached-devel \
 -y
 ```
 ```
-cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/sysconfig/memcache.ini /etc/sysconfig/memcache.ini
+cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/sysconfig/memcached /etc/sysconfig/memcached
 ```
 ```
 mkdir -p /var/run/memcached
@@ -434,7 +441,7 @@ sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/sysconfig/memcached
 sed -i 's/CACHESIZE=.*/CACHESIZE="512"/' /etc/sysconfig/memcached
 sed -i 's/OPTIONS=.*/OPTIONS="-s /var/run/memcached/memcached.sock -a 0777"/' /etc/sysconfig/memcached
 sed -i 's/PORT=.*/PORT="11211"/' /etc/init.d/memcached
-sed -i 's/USER=.*/"$USER"/' /etc/init.d/memcached
+sed -i 's/USER=.*/USER="$VAR_USER"/' /etc/init.d/memcached
 sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/init.d/memcached
 sed -i 's/CACHESIZE=.*/CACHESIZE="512"/' /etc/init.d/memcached
 sed -i 's/OPTIONS=.*/OPTIONS="-s /var/run/memcached/memcached.sock -a 0777"/' /etc/init.d/memcached
