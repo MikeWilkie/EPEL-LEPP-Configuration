@@ -61,9 +61,6 @@ mysql-libs \
 -y
 ```
 ```
-rm -rf /var/log/exim /var/log/maillog* /var/log/spooler*
-```
-```
 yum install \
 aspell-devel \
 bzip2-devel \
@@ -106,6 +103,7 @@ t1lib \
 t1lib-devel \
 t1lib-static \
 vim-enhanced \
+wget \
 -y
 ```
 
@@ -151,7 +149,7 @@ echo -e "\nexport PATH="'$PATH'":/root/git/depot_tools" >> ~/.bashrc
 ```
 cd ~/git/nginx
 wget http://www.openssl.org/source/openssl-1.0.1e.tar.gz
-tar xzvf openssl* && rm -rf openssl*
+tar xzvf openssl* && rm -rf openssl-1.0.1e.tar.gz
 ```
 ```
 mkdir ~/git/nginx
@@ -227,11 +225,11 @@ make && make install
 ```
 mkdir /var/www
 mkdir -p /etc/skel/{backup,bin,error,html,log,tmp}
-mkdir -p /var/www/$DOMAIN/tmp/ngx-pagespeed
 mkdir -p /etc/nginx/conf.d
 mkdir -p /etc/nginx/speed.d
 mkdir -p /etc/nginx/ssl.d
 mkdir -p /etc/nginx/framework.d
+mkdir -p /tmp/ngx_pagespeed
 ```
 ```
 mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
@@ -244,6 +242,7 @@ chmod 755 /var/www
 chmod -R go+rx /var
 chmod -R go+rx /var/www
 chmod -R go+rx /var/www/*
+chown -R nobody:nobody /tmp/ngx_pagespeed
 ```
 ```
 useradd $USER --home=/var/www/$DOMAIN --shell=/bin/bash --user-group --create-home
@@ -290,7 +289,7 @@ vim /etc/nginx/ssl.d/chain.ca.crt
 ```
 ```
 cat /etc/nginx/ssl.d/chain.ca.crt >> /etc/nginx/ssl.d/$DOMAIN.crt
-sed -i "s/80 default;/80 default;\n\tlisten\t\t\t\t443 ssl;\n\tssl_certificate\t\t\t\/etc\/nginx\/ssl.d\/$DOMAIN.crt;\n\t\ssl_certificate_key\t\t\/etc\/nginx\/ssl.d\/$DOMAIN.key;\n\tinclude\t\t\t\t\/etc\/nginx\/ssl.d\/ssl.conf;/" /etc/nginx/conf.d/$DOMAIN.conf
+sed -i "s/#listen;/ listen/" /etc/nginx/conf.d/$DOMAIN.conf
 ```
 
 ##php-fpm
