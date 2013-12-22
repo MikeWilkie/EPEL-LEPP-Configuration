@@ -22,12 +22,17 @@ mv /etc/localtime /etc/localtime.bak
 ln -s /usr/share/zoneinfo/$TZ /etc/localtime
 ```
 
+##Create User Variables
+```
+echo -e "USER='appusername'; export USER" >> ~/.profile
+echo -e "DOMAIN='appdomain'; export DOMAIN" >> ~/.profile
+```
+
 ##Enable Repositories
 ```
 rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
 rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
-rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
 ```
 ```
 sed -i "s/enable=0/enable=1/" /etc/yum.repos.d/epel.repo
@@ -50,14 +55,10 @@ yum groupinstall \
 ```
 ```
 yum remove \
-postfix \
 mysql \
 mysql-devel \
 mysql-libs \
 -y
-```
-```
-rm -rf /var/log/exim /var/log/maillog* /var/log/spooler*
 ```
 ```
 yum install \
@@ -102,6 +103,7 @@ t1lib \
 t1lib-devel \
 t1lib-static \
 vim-enhanced \
+wget \
 -y
 ```
 
@@ -130,9 +132,10 @@ cd ~/git
 git clone https://github.com/MikeWilkie/EPEL-LEPP-Configuration
 ```
 
-##openssl
+##openssl (if openssl version < 1.01)
 
 ```
+rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
 yum --enablerepo=axivo update openssl
 ```
 
@@ -146,7 +149,7 @@ echo -e "\nexport PATH="'$PATH'":/root/git/depot_tools" >> ~/.bashrc
 ```
 cd ~/git/nginx
 wget http://www.openssl.org/source/openssl-1.0.1e.tar.gz
-tar xzvf openssl* && rm -rf openssl*
+tar xzvf openssl* && rm -rf openssl-1.0.1e.tar.gz
 ```
 ```
 mkdir ~/git/nginx
@@ -222,11 +225,11 @@ make && make install
 ```
 mkdir /var/www
 mkdir -p /etc/skel/{backup,bin,error,html,log,tmp}
-mkdir -p /var/www/$DOMAIN/tmp/ngx-pagespeed
 mkdir -p /etc/nginx/conf.d
 mkdir -p /etc/nginx/speed.d
 mkdir -p /etc/nginx/ssl.d
 mkdir -p /etc/nginx/framework.d
+mkdir -p /tmp/ngx_pagespeed
 ```
 ```
 mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
@@ -239,6 +242,8 @@ chmod 755 /var/www
 chmod -R go+rx /var
 chmod -R go+rx /var/www
 chmod -R go+rx /var/www/*
+chown -R nobody:nobody /tmp/ngx_pagespeed
+chmod -R 777 /tmp/ngx_pagespeed
 ```
 ```
 useradd $USER --home=/var/www/$DOMAIN --shell=/bin/bash --user-group --create-home
@@ -252,10 +257,10 @@ chmod 600 /var/www/$DOMAIN/.ssh/authorized_keys
 echo -e "$USER ALL=(ALL) ALL" >> /etc/sudoers
 ```
 ```
+rm -rf /etc/nginx/conf.d/*
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/nginx.conf /etc/nginx/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/mime.types /etc/nginx/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/fastcgi_params /etc/nginx/
-cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/conf.d/default.conf /etc/nginx/conf.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/conf.d/domain.conf /etc/nginx/conf.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/gzip.conf /etc/nginx/speed.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/headers-cache.conf /etc/nginx/speed.d/
@@ -285,7 +290,7 @@ vim /etc/nginx/ssl.d/chain.ca.crt
 ```
 ```
 cat /etc/nginx/ssl.d/chain.ca.crt >> /etc/nginx/ssl.d/$DOMAIN.crt
-sed -i "s/80 default;/80 default;\n\tlisten\t\t\t\t443 ssl;\n\tssl_certificate\t\t\t\/etc\/nginx\/ssl.d\/$DOMAIN.crt;\n\t\ssl_certificate_key\t\t\/etc\/nginx\/ssl.d\/$DOMAIN.key;\n\tinclude\t\t\t\t\/etc\/nginx\/ssl.d\/ssl.conf;/" /etc/nginx/conf.d/$DOMAIN.conf
+sed -i "s/#listen;/ listen/" /etc/nginx/conf.d/$DOMAIN.conf
 ```
 
 ##php-fpm
@@ -349,6 +354,7 @@ chmod -R 755 /var/log/php-fpm
 chmod -R 755 /var/run/php-fpm
 ```
 ```
+rm -rf /etc/php-fpm.d/*
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php.ini /etc/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php-fpm.d/domain.conf /etc/php-fpm.d/www.conf
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php-fpm.conf /etc/
@@ -399,7 +405,7 @@ mysql_install_db
 ```
 chmod -R 755 /etc/init.d/mysql
 service mysql start
-ln -s /var/run/mysql/mysql.sock /var/lib/mysql/mysql.sock
+ln -s /var/lib/mysql/mysql.sock /var/run/mysql/mysql.sock
 mysql_secure_installation
 chkconfig mysql on
 ```
