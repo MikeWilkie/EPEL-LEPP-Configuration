@@ -17,15 +17,15 @@ Configuration files for:
 ```
 tzselect
 touch ~/.profile
-echo -e "TZ='America/New_York'; export TZ" >> ~/.profile
+echo -e "TZ='America/New_York'; export TZ" >> ~/.bash_profile
 mv /etc/localtime /etc/localtime.bak
 ln -s /usr/share/zoneinfo/$TZ /etc/localtime
 ```
 
 ##Create User Variables
 ```
-echo -e "USER='appusername'; export USER" >> ~/.profile
-echo -e "DOMAIN='appdomain'; export DOMAIN" >> ~/.profile
+APP_USER="appusername"; export APP_USER
+APP_DOMAIN="appdomain.com"; export APP_DOMAIN
 ```
 
 ##Enable Repositories
@@ -243,15 +243,15 @@ chown -R nobody:nobody /tmp/ngx_pagespeed
 chmod -R 777 /tmp/ngx_pagespeed
 ```
 ```
-useradd $USER --home=/var/www/$DOMAIN --shell=/bin/bash --user-group --create-home
+useradd $APP_USER --home=/var/www/$APP_DOMAIN --shell=/bin/bash --user-group --create-home
 ```
 ```
-cp -r ~/.ssh /var/www/$DOMAIN/
-chown -R $USER:$USER /var/www/$DOMAIN/
-chmod -R o+wrx /var/www/$DOMAIN/tmp
-chmod 700 /var/www/$DOMAIN/.ssh
-chmod 600 /var/www/$DOMAIN/.ssh/authorized_keys
-echo -e "$USER ALL=(ALL) ALL" >> /etc/sudoers
+cp -r ~/.ssh /var/www/$APP_DOMAIN/
+chown -R $APP_USER:$APP_USER /var/www/$APP_DOMAIN/
+chmod -R o+wrx /var/www/$APP_DOMAIN/tmp
+chmod 700 /var/www/$APP_DOMAIN/.ssh
+chmod 600 /var/www/$APP_DOMAIN/.ssh/authorized_keys
+echo -e "$APP_USER ALL=(ALL) ALL" >> /etc/sudoers
 ```
 ```
 rm -rf /etc/nginx/conf.d/*
@@ -268,8 +268,8 @@ cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/framework.d/*.conf /etc/nginx
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/nginx /etc/init.d/
 ```
 ```
-mv /etc/nginx/conf.d/domain.conf /etc/nginx/conf.d/$DOMAIN.conf
-sed -i 's/$VAR_DOMAIN/$DOMAIN/' /etc/nginx/conf.d/$DOMAIN.conf
+mv /etc/nginx/conf.d/domain.conf /etc/nginx/conf.d/$APP_DOMAIN.conf
+sed -i 's/$VAR_DOMAIN/$APP_DOMAIN/' /etc/nginx/conf.d/$APP_DOMAIN.conf
 ```
 ```
 chmod -R 755 /etc/init.d/nginx
@@ -281,13 +281,13 @@ chkconfig nginx on
 
 ```
 cd /etc/nginx/ssl.d
-openssl req -new -newkey rsa:2048 -nodes -keyout $DOMAIN.key -out $DOMAIN.csr
-vim /etc/nginx/ssl.d/$DOMAIN.crt
+openssl req -new -newkey rsa:2048 -nodes -keyout $APP_DOMAIN.key -out $APP_DOMAIN.csr
+vim /etc/nginx/ssl.d/$APP_DOMAIN.crt
 vim /etc/nginx/ssl.d/chain.ca.crt
 ```
 ```
-cat /etc/nginx/ssl.d/chain.ca.crt >> /etc/nginx/ssl.d/$DOMAIN.crt
-sed -i "s/#listen;/ listen/" /etc/nginx/conf.d/$DOMAIN.conf
+cat /etc/nginx/ssl.d/chain.ca.crt >> /etc/nginx/ssl.d/$APP_DOMAIN.crt
+sed -i "s/#listen;/ listen/" /etc/nginx/conf.d/$APP_DOMAIN.conf
 ```
 
 ##php-fpm
@@ -361,9 +361,9 @@ cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/php.d/memcache.ini /etc/php.d/memca
 cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/php-fpm /etc/init.d/
 ```
 ```
-mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/$DOMAIN.conf
-sed -i 's/$VAR_USER/$USER/' /etc/php-fpm.conf
-sed -i 's/$VAR_DOMAIN/$DOMAIN/' /etc/php-fpm.d/$DOMAIN.conf
+mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/$APP_DOMAIN.conf
+sed -i 's/$VAR_USER/$APP_USER/' /etc/php-fpm.conf
+sed -i 's/$VAR_DOMAIN/$APP_DOMAIN/' /etc/php-fpm.d/$APP_DOMAIN.conf
 ```
 ```
 chmod -R 755 /etc/init.d/php-fpm
@@ -439,7 +439,7 @@ chmod -R 755 /var/run/memcached
 ```
 ```
 sed -i 's/PORT=.*/PORT="11211"/' /etc/sysconfig/memcached
-sed -i 's/USER=.*/"$USER"/' /etc/sysconfig/memcached
+sed -i 's/USER=.*/"$APP_USER"/' /etc/sysconfig/memcached
 sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/sysconfig/memcached
 sed -i 's/CACHESIZE=.*/CACHESIZE="512"/' /etc/sysconfig/memcached
 sed -i 's/OPTIONS=.*/OPTIONS="-s /var/run/memcached/memcached.sock -a 0777"/' /etc/sysconfig/memcached
