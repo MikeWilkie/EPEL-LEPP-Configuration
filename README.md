@@ -24,8 +24,8 @@ ln -s /usr/share/zoneinfo/$TZ /etc/localtime
 
 ##Create User Variables
 ```
-APP_USER="appusername"; export APP_USER
-APP_DOMAIN="appdomain.com"; export APP_DOMAIN
+echo -e "APP_USER='appusername'; export APP_USER" >> ~/.bash_profile
+echo -e "APP_DOMAIN='appdomain.com'; export APP_DOMAIN" >> ~/.bash_profile
 ```
 
 ##Enable Repositories
