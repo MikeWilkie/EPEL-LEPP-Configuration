@@ -35,8 +35,8 @@ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
 ```
 ```
-sed -i "s/enabled=0/enabled=1/" /etc/yum.repos.d/epel.repo
-sed -i "s/enabled=0/enabled=1/" /etc/yum.repos.d/remi.repo
+sed -i '0,/enabled=0/s//enabled=1/' /etc/yum.repos.d/epel.repo
+sed -i '0,/enabled=0/s//enabled=1/' /etc/yum.repos.d/remi.repo
 sed -i "s/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-remi/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-remi\nexclude=mysql-*/" /etc/yum.repos.d/remi.repo
 ```
 
