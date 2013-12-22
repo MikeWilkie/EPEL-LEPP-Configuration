@@ -22,12 +22,17 @@ mv /etc/localtime /etc/localtime.bak
 ln -s /usr/share/zoneinfo/$TZ /etc/localtime
 ```
 
+##Create User Variables
+```
+echo -e "USER='appusername'; export USER" >> ~/.profile
+echo -e "DOMAIN='appdomain'; export DOMAIN" >> ~/.profile
+```
+
 ##Enable Repositories
 ```
 rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
 rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
-rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
 ```
 ```
 sed -i "s/enable=0/enable=1/" /etc/yum.repos.d/epel.repo
@@ -50,7 +55,6 @@ yum groupinstall \
 ```
 ```
 yum remove \
-postfix \
 mysql \
 mysql-devel \
 mysql-libs \
@@ -130,9 +134,10 @@ cd ~/git
 git clone https://github.com/MikeWilkie/EPEL-LEPP-Configuration
 ```
 
-##openssl
+##openssl (if openssl version < 1.01)
 
 ```
+rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
 yum --enablerepo=axivo update openssl
 ```
 
