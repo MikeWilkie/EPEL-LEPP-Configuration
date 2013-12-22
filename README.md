@@ -243,7 +243,10 @@ chmod -R go+rx /var
 chmod -R go+rx /var/www
 chmod -R go+rx /var/www/*
 chown -R nobody:nobody /tmp/ngx_pagespeed
+<<<<<<< HEAD
 chmod -R 777 /tmp/ngx_pagespeed
+=======
+>>>>>>> b15746e28b5d154a18cc25b123173560940eb4c2
 ```
 ```
 useradd $USER --home=/var/www/$DOMAIN --shell=/bin/bash --user-group --create-home
