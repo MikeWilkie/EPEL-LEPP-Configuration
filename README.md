@@ -1,4 +1,4 @@
-﻿EPEL-LEPP-Configuration
+EPEL-LEPP-Configuration
 =======================
 
 ##Optimized for Magento
@@ -272,10 +272,14 @@ cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/nginx /etc/init.d/
 ```
 ```
 mv /etc/nginx/conf.d/domain.conf /etc/nginx/conf.d/$APP_DOMAIN.conf
+<<<<<<< HEAD
 mv /etc/nginx/conf.d/domain.ssl.conf.bk /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk
 sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/g' /etc/nginx/conf.d/$APP_DOMAIN.conf
 sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/g' /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk
 sed -i 's/$VAR_USER/'$APP_USER'/g' /etc/nginx/nginx.conf
+=======
+sed -i 's/$VAR_DOMAIN/$APP_DOMAIN/' /etc/nginx/conf.d/$APP_DOMAIN.conf
+>>>>>>> 24023366651a35488f39d33ee390ff96f290728c
 ```
 ```
 chmod -R 755 /etc/init.d/nginx
@@ -293,7 +297,11 @@ vim /etc/nginx/ssl.d/chain.ca.crt
 ```
 ```
 cat /etc/nginx/ssl.d/chain.ca.crt >> /etc/nginx/ssl.d/$APP_DOMAIN.crt
+<<<<<<< HEAD
 mv /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf
+=======
+sed -i "s/#listen;/ listen/" /etc/nginx/conf.d/$APP_DOMAIN.conf
+>>>>>>> 24023366651a35488f39d33ee390ff96f290728c
 ```
 
 ##php-fpm
@@ -368,10 +376,17 @@ cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/php.d/memcache.ini /etc/php.d/memca
 cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/php-fpm /etc/init.d/
 
 ```
+<<<<<<< HEAD
 mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/$APP_DOMAIN.conf
 sed -i 's/$VAR_USER/'$APP_USER'/' /etc/php-fpm.conf
 sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/' /etc/php-fpm.d/$APP_DOMAIN.conf
 sed -i 's/$VAR_USER/'$APP_USER'/' /etc/php-fpm.d/$APP_DOMAIN.conf
+=======
+```
+mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/$APP_DOMAIN.conf
+sed -i 's/$VAR_USER/$APP_USER/' /etc/php-fpm.conf
+sed -i 's/$VAR_DOMAIN/$APP_DOMAIN/' /etc/php-fpm.d/$APP_DOMAIN.conf
+>>>>>>> 24023366651a35488f39d33ee390ff96f290728c
 ```
 ```
 chmod -R 755 /etc/init.d/php-fpm
@@ -447,7 +462,11 @@ chmod -R 755 /var/run/memcached
 ```
 ```
 sed -i 's/PORT=.*/PORT="11211"/' /etc/sysconfig/memcached
+<<<<<<< HEAD
 sed -i 's/USER=.*/USER="'$APP_USER'"/' /etc/sysconfig/memcached
+=======
+sed -i 's/USER=.*/"$APP_USER"/' /etc/sysconfig/memcached
+>>>>>>> 24023366651a35488f39d33ee390ff96f290728c
 sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/sysconfig/memcached
 sed -i 's/CACHESIZE=.*/CACHESIZE="512"/' /etc/sysconfig/memcached
 sed -i 's/OPTIONS=.*/OPTIONS="-l 127.0.0.1 -a 0777"/' /etc/sysconfig/memcached
