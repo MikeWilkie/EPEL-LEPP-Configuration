@@ -1,4 +1,4 @@
-﻿EPEL-LEPP-Configuration
+EPEL-LEPP-Configuration
 =======================
 
 ##Optimized for Magento
@@ -142,9 +142,12 @@ yum --enablerepo=axivo update openssl
 ##nginx
 
 ```
-cd ~/git
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-echo -e "\nexport PATH="'$PATH'":/root/git/depot_tools" >> ~/.bashrc
+mkdir ~/git/nginx
+cd ~/git/nginx
+wget http://nginx.org/download/nginx-1.5.8.tar.gz
+tar -xzvf nginx-1.5.8.tar.gz
+rm -rf nginx-1.5.8.tar.gz
+
 ```
 ```
 cd ~/git/nginx
@@ -152,28 +155,22 @@ wget http://www.openssl.org/source/openssl-1.0.1e.tar.gz
 tar xzvf openssl* && rm -rf openssl-1.0.1e.tar.gz
 ```
 ```
-mkdir ~/git/nginx
-cd nginx
-wget http://nginx.org/download/nginx-1.4.3.tar.gz
-tar -xzvf nginx-1.4.3.tar.gz
-rm -rf nginx-1.4.3.tar.gz
-```
-```
+
 git clone git://github.com/pagespeed/ngx_pagespeed.git
 cd ngx_pagespeed
-wget https://dl.google.com/dl/page-speed/psol/1.6.29.7.tar.gz
-tar -xzvf 1.6.29.7.tar.gz
-rm -rf 1.6.29.7.tar.gz
+wget https://dl.google.com/dl/page-speed/psol/1.7.30.1.tar.gz
+tar -xzvf 1.7.30.1.tar.gz
+rm -rf 1.7.30.1.tar.gz
 ```
 ```
 cd ~/git/nginx
 git clone git://github.com/agentzh/headers-more-nginx-module.git
-wget http://people.FreeBSD.org/~osa/ngx_http_redis-0.3.6.tar.gz
-tar -xzvf ngx_http_redis-0.3.6.tar.gz
-rm -rf ngx_http_redis-0.3.6.tar.gz
+wget http://people.FreeBSD.org/~osa/ngx_http_redis-0.3.7.tar.gz
+tar -xzvf ngx_http_redis-0.3.7.tar.gz
+rm -rf ngx_http_redis-0.3.7.tar.gz
 ```
 ```
-cd ~/git/nginx/nginx-1.4.3
+cd ~/git/nginx/nginx-1.5.8
 ```
 ```
 ./configure \
@@ -217,7 +214,7 @@ cd ~/git/nginx/nginx-1.4.3
 --without-mail_smtp_module \
 --add-module=$HOME/git/nginx/headers-more-nginx-module \
 --add-module=$HOME/git/nginx/ngx_pagespeed \
---add-module=$HOME/git/nginx/ngx_http_redis-0.3.6
+--add-module=$HOME/git/nginx/ngx_http_redis-0.3.7
 ```
 ```
 make && make install
@@ -243,10 +240,7 @@ chmod -R go+rx /var
 chmod -R go+rx /var/www
 chmod -R go+rx /var/www/*
 chown -R nobody:nobody /tmp/ngx_pagespeed
-<<<<<<< HEAD
 chmod -R 777 /tmp/ngx_pagespeed
-=======
->>>>>>> b15746e28b5d154a18cc25b123173560940eb4c2
 ```
 ```
 useradd $USER --home=/var/www/$DOMAIN --shell=/bin/bash --user-group --create-home
