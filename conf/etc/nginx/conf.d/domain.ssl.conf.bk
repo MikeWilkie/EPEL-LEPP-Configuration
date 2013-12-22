@@ -1,12 +1,12 @@
 server {
-        server_name                             www.$VAR_DOMAIN;
-        rewrite                                 ^(.*) http://$VAR_DOMAIN$1 permanent;
-}
-
-server {
-        listen                                  80 default;
+        listen                                  443 ssl spdy;
         server_name                             $VAR_DOMAIN;
         root                                    /var/www/$VAR_DOMAIN/html;
+
+        ssl                                     on;     
+        ssl_certificate                         /etc/nginx/ssl.d/testr.makr.com.crt;
+        ssl_certificate_key                     /etc/nginx/ssl.d/testr.makr.com.key;
+        include                                 /etc/nginx/ssl.d/ssl.conf;
 
         error_log                               /var/www/$VAR_DOMAIN/log/error.log warn;
         auth_basic_user_file                    /etc/nginx/conf.d/$VAR_DOMAIN-htpasswd;

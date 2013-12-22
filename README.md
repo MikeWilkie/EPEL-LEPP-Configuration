@@ -17,15 +17,15 @@ Configuration files for:
 ```
 tzselect
 touch ~/.profile
-echo -e "TZ='America/New_York'; export TZ" >> ~/.profile
+echo -e "TZ='America/New_York'; export TZ" >> ~/.bash_profile
 mv /etc/localtime /etc/localtime.bak
 ln -s /usr/share/zoneinfo/$TZ /etc/localtime
 ```
 
 ##Create User Variables
 ```
-echo -e "USER='appusername'; export USER" >> ~/.profile
-echo -e "DOMAIN='appdomain'; export DOMAIN" >> ~/.profile
+APP_USER="appusername"; export APP_USER
+APP_DOMAIN="appdomain.com"; export APP_DOMAIN
 ```
 
 ##Enable Repositories
@@ -142,9 +142,12 @@ yum --enablerepo=axivo update openssl
 ##nginx
 
 ```
-cd ~/git
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-echo -e "\nexport PATH="'$PATH'":/root/git/depot_tools" >> ~/.bashrc
+mkdir ~/git/nginx
+cd ~/git/nginx
+wget http://nginx.org/download/nginx-1.5.8.tar.gz
+tar -xzvf nginx-1.5.8.tar.gz
+rm -rf nginx-1.5.8.tar.gz
+
 ```
 ```
 cd ~/git/nginx
@@ -152,28 +155,22 @@ wget http://www.openssl.org/source/openssl-1.0.1e.tar.gz
 tar xzvf openssl* && rm -rf openssl-1.0.1e.tar.gz
 ```
 ```
-mkdir ~/git/nginx
-cd nginx
-wget http://nginx.org/download/nginx-1.4.3.tar.gz
-tar -xzvf nginx-1.4.3.tar.gz
-rm -rf nginx-1.4.3.tar.gz
-```
-```
+
 git clone git://github.com/pagespeed/ngx_pagespeed.git
 cd ngx_pagespeed
-wget https://dl.google.com/dl/page-speed/psol/1.6.29.7.tar.gz
-tar -xzvf 1.6.29.7.tar.gz
-rm -rf 1.6.29.7.tar.gz
+wget https://dl.google.com/dl/page-speed/psol/1.7.30.1.tar.gz
+tar -xzvf 1.7.30.1.tar.gz
+rm -rf 1.7.30.1.tar.gz
 ```
 ```
 cd ~/git/nginx
 git clone git://github.com/agentzh/headers-more-nginx-module.git
-wget http://people.FreeBSD.org/~osa/ngx_http_redis-0.3.6.tar.gz
-tar -xzvf ngx_http_redis-0.3.6.tar.gz
-rm -rf ngx_http_redis-0.3.6.tar.gz
+wget http://people.FreeBSD.org/~osa/ngx_http_redis-0.3.7.tar.gz
+tar -xzvf ngx_http_redis-0.3.7.tar.gz
+rm -rf ngx_http_redis-0.3.7.tar.gz
 ```
 ```
-cd ~/git/nginx/nginx-1.4.3
+cd ~/git/nginx/nginx-1.5.8
 ```
 ```
 ./configure \
@@ -217,7 +214,7 @@ cd ~/git/nginx/nginx-1.4.3
 --without-mail_smtp_module \
 --add-module=$HOME/git/nginx/headers-more-nginx-module \
 --add-module=$HOME/git/nginx/ngx_pagespeed \
---add-module=$HOME/git/nginx/ngx_http_redis-0.3.6
+--add-module=$HOME/git/nginx/ngx_http_redis-0.3.7
 ```
 ```
 make && make install
@@ -243,21 +240,18 @@ chmod -R go+rx /var
 chmod -R go+rx /var/www
 chmod -R go+rx /var/www/*
 chown -R nobody:nobody /tmp/ngx_pagespeed
-<<<<<<< HEAD
 chmod -R 777 /tmp/ngx_pagespeed
-=======
->>>>>>> b15746e28b5d154a18cc25b123173560940eb4c2
 ```
 ```
-useradd $USER --home=/var/www/$DOMAIN --shell=/bin/bash --user-group --create-home
+useradd $APP_USER --home=/var/www/$APP_DOMAIN --shell=/bin/bash --user-group --create-home
 ```
 ```
-cp -r ~/.ssh /var/www/$DOMAIN/
-chown -R $USER:$USER /var/www/$DOMAIN/
-chmod -R o+wrx /var/www/$DOMAIN/tmp
-chmod 700 /var/www/$DOMAIN/.ssh
-chmod 600 /var/www/$DOMAIN/.ssh/authorized_keys
-echo -e "$USER ALL=(ALL) ALL" >> /etc/sudoers
+cp -r ~/.ssh /var/www/$APP_DOMAIN/
+chown -R $APP_USER:$APP_USER /var/www/$APP_DOMAIN/
+chmod -R o+wrx /var/www/$APP_DOMAIN/tmp
+chmod 700 /var/www/$APP_DOMAIN/.ssh
+chmod 600 /var/www/$APP_DOMAIN/.ssh/authorized_keys
+echo -e "$APP_USER ALL=(ALL) ALL" >> /etc/sudoers
 ```
 ```
 rm -rf /etc/nginx/conf.d/*
@@ -265,17 +259,23 @@ cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/nginx.conf /etc/nginx/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/mime.types /etc/nginx/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/fastcgi_params /etc/nginx/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/conf.d/domain.conf /etc/nginx/conf.d/
+cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/conf.d/domain.ssl.conf.bk /etc/nginx/conf.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/gzip.conf /etc/nginx/speed.d/
+cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/cors.conf /etc/nginx/speed.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/headers-cache.conf /etc/nginx/speed.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/headers-nocache.conf /etc/nginx/speed.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/pagespeed.conf /etc/nginx/speed.d/
+cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/pagespeed-server.conf /etc/nginx/speed.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/ssl.d/ssl.conf /etc/nginx/ssl.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/framework.d/*.conf /etc/nginx/framework.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/nginx /etc/init.d/
 ```
 ```
-mv /etc/nginx/conf.d/domain.conf /etc/nginx/conf.d/$DOMAIN.conf
-sed -i 's/$VAR_DOMAIN/$DOMAIN/' /etc/nginx/conf.d/$DOMAIN.conf
+mv /etc/nginx/conf.d/domain.conf /etc/nginx/conf.d/$APP_DOMAIN.conf
+mv /etc/nginx/conf.d/domain.ssl.conf.bk /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk
+sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/g' /etc/nginx/conf.d/$APP_DOMAIN.conf
+sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/g' /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk
+sed -i 's/$VAR_USER/'$APP_USER'/g' /etc/nginx/nginx.conf
 ```
 ```
 chmod -R 755 /etc/init.d/nginx
@@ -287,13 +287,13 @@ chkconfig nginx on
 
 ```
 cd /etc/nginx/ssl.d
-openssl req -new -newkey rsa:2048 -nodes -keyout $DOMAIN.key -out $DOMAIN.csr
-vim /etc/nginx/ssl.d/$DOMAIN.crt
+openssl req -new -newkey rsa:2048 -nodes -keyout $APP_DOMAIN.key -out $APP_DOMAIN.csr
+vim /etc/nginx/ssl.d/$APP_DOMAIN.crt
 vim /etc/nginx/ssl.d/chain.ca.crt
 ```
 ```
-cat /etc/nginx/ssl.d/chain.ca.crt >> /etc/nginx/ssl.d/$DOMAIN.crt
-sed -i "s/#listen;/ listen/" /etc/nginx/conf.d/$DOMAIN.conf
+cat /etc/nginx/ssl.d/chain.ca.crt >> /etc/nginx/ssl.d/$APP_DOMAIN.crt
+mv /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf
 ```
 
 ##php-fpm
@@ -357,19 +357,21 @@ chmod -R 755 /var/log/php-fpm
 chmod -R 755 /var/run/php-fpm
 ```
 ```
+```
 rm -rf /etc/php-fpm.d/*
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php.ini /etc/
-cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php-fpm.d/domain.conf /etc/php-fpm.d/www.conf
+cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php-fpm.d/www.conf /etc/php-fpm.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php-fpm.conf /etc/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/php-fpm /etc/init.d/
 cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/php.d/opcache.ini /etc/php.d/opcache.ini
 cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/php.d/memcache.ini /etc/php.d/memcache.ini
 cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/php-fpm /etc/init.d/
+
 ```
-```
-mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/$DOMAIN.conf
-sed -i 's/$VAR_USER/$USER/' /etc/php-fpm.conf
-sed -i 's/$VAR_DOMAIN/$DOMAIN/' /etc/php-fpm.d/$DOMAIN.conf
+mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/$APP_DOMAIN.conf
+sed -i 's/$VAR_USER/'$APP_USER'/' /etc/php-fpm.conf
+sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/' /etc/php-fpm.d/$APP_DOMAIN.conf
+sed -i 's/$VAR_USER/'$APP_USER'/' /etc/php-fpm.d/$APP_DOMAIN.conf
 ```
 ```
 chmod -R 755 /etc/init.d/php-fpm
@@ -408,7 +410,7 @@ mysql_install_db
 ```
 chmod -R 755 /etc/init.d/mysql
 service mysql start
-ln -s /var/lib/mysql/mysql.sock /var/run/mysql/mysql.sock
+ln -s /var/run/mysql/mysql.sock /var/lib/mysql/mysql.sock
 mysql_secure_installation
 chkconfig mysql on
 ```
@@ -445,15 +447,15 @@ chmod -R 755 /var/run/memcached
 ```
 ```
 sed -i 's/PORT=.*/PORT="11211"/' /etc/sysconfig/memcached
-sed -i 's/USER=.*/"$USER"/' /etc/sysconfig/memcached
+sed -i 's/USER=.*/USER="'$APP_USER'"/' /etc/sysconfig/memcached
 sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/sysconfig/memcached
 sed -i 's/CACHESIZE=.*/CACHESIZE="512"/' /etc/sysconfig/memcached
-sed -i 's/OPTIONS=.*/OPTIONS="-s /var/run/memcached/memcached.sock -a 0777"/' /etc/sysconfig/memcached
+sed -i 's/OPTIONS=.*/OPTIONS="-l 127.0.0.1 -a 0777"/' /etc/sysconfig/memcached
 sed -i 's/PORT=.*/PORT="11211"/' /etc/init.d/memcached
-sed -i 's/USER=.*/USER="$VAR_USER"/' /etc/init.d/memcached
+sed -i 's/USER=.*/USER="'$APP_USER'"/' /etc/init.d/memcached
 sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/init.d/memcached
 sed -i 's/CACHESIZE=.*/CACHESIZE="512"/' /etc/init.d/memcached
-sed -i 's/OPTIONS=.*/OPTIONS="-s /var/run/memcached/memcached.sock -a 0777"/' /etc/init.d/memcached
+sed -i 's/OPTIONS=.*/OPTIONS="-l 127.0.0.1 -a 0777"/' /etc/init.d/memcached
 ```
 ```
 chmod -R 755 /etc/init.d/memcached
@@ -470,7 +472,6 @@ redis \
 ```
 ```
 mv /etc/redis.conf /etc/redis.conf.bak
-cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/redis /etc/init.d/redis
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/redis.conf /etc/
 ```
 ```
