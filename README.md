@@ -293,7 +293,7 @@ vim /etc/nginx/ssl.d/$APP_DOMAIN.crt
 vim /etc/nginx/ssl.d/chain.ca.crt
 ```
 ```
-cat /etc/nginx/ssl.d/chain.ca.crt >> /etc/nginx/ssl.d/$APP_DOMAIN.crt
+cat /etc/nginx/ssl.d/chain.ca.crt /etc/nginx/ssl.d/$APP_DOMAIN.crt > trusted.crt;
 mv /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf
 sed -i "s/#listen;/ listen/" /etc/nginx/conf.d/$APP_DOMAIN.conf
 ```
