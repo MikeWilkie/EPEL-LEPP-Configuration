@@ -136,7 +136,8 @@ git clone https://github.com/MikeWilkie/EPEL-LEPP-Configuration
 
 ```
 rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
-yum --enablerepo=axivo update openssl
+yum --enablerepo=axivo update openssl-libs openssl-devel
+yum --enablerepo=axivo install openssl
 ```
 
 ##nginx
@@ -295,6 +296,9 @@ vim /etc/nginx/ssl.d/chain.ca.crt
 cat /etc/nginx/ssl.d/chain.ca.crt >> /etc/nginx/ssl.d/$APP_DOMAIN.crt
 mv /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf
 sed -i "s/#listen;/ listen/" /etc/nginx/conf.d/$APP_DOMAIN.conf
+```
+```
+openssl dhparam -out /etc/nginx/ssl.d/dhparam.pem 2048
 ```
 
 ##php-fpm
