@@ -145,23 +145,23 @@ yum --enablerepo=axivo install openssl
 ```
 mkdir ~/git/nginx
 cd ~/git/nginx
-wget http://nginx.org/download/nginx-1.5.8.tar.gz
-tar -xzvf nginx-1.5.8.tar.gz
-rm -rf nginx-1.5.8.tar.gz
+wget http://nginx.org/download/nginx-1.5.12.tar.gz
+tar -xzvf nginx-1.5.12.tar.gz
+rm -rf nginx-1.5.12.tar.gz
 
 ```
 ```
 cd ~/git/nginx
-wget http://www.openssl.org/source/openssl-1.0.1e.tar.gz
-tar xzvf openssl* && rm -rf openssl-1.0.1e.tar.gz
+wget https://www.openssl.org/source/openssl-1.0.1f.tar.gz
+tar xzvf openssl* && rm -rf openssl-1.0.1f.tar.gz
 ```
 ```
 
 git clone git://github.com/pagespeed/ngx_pagespeed.git
 cd ngx_pagespeed
-wget https://dl.google.com/dl/page-speed/psol/1.7.30.1.tar.gz
-tar -xzvf 1.7.30.1.tar.gz
-rm -rf 1.7.30.1.tar.gz
+wget https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz
+tar -xzvf 1.7.30.4.tar.gz
+rm -rf 1.7.30.4.tar.gz
 ```
 ```
 cd ~/git/nginx
@@ -171,7 +171,7 @@ tar -xzvf ngx_http_redis-0.3.7.tar.gz
 rm -rf ngx_http_redis-0.3.7.tar.gz
 ```
 ```
-cd ~/git/nginx/nginx-1.5.8
+cd ~/git/nginx/nginx-1.5.12
 ```
 ```
 ./configure \
@@ -184,7 +184,7 @@ cd ~/git/nginx/nginx-1.5.8
 --http-log-path=/var/log/nginx/access.log \
 --user=nginx \
 --group=www-data \
---with-openssl=$HOME/git/nginx/openssl-1.0.1e \
+--with-openssl=$HOME/git/nginx/openssl-1.0.1f \
 --with-google_perftools_module \
 --with-http_ssl_module \
 --with-http_secure_link_module \
