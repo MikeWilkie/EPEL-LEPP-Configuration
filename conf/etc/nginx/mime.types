@@ -6,12 +6,9 @@ types {
         text/plain                                      txt;
         text/comma-separated-values                     csv;
         text/tab-separated-values                       tsv;
-        text/mathml                                     mml;
-        text/rdf                                        rdf rdfs owl;
         text/sgml                                       sgm sgml;
         text/calendar                                   ics;
-        text/vcard                                      vcf vcard;
-        text/x-markdown                                 md;
+        text/x-markdown                                 md markdown;
         text/x-component                                htc;
         text/x-yaml                                     yml yaml;
         text/vnd.sun.j2me.app-descriptor                jad;
@@ -32,41 +29,44 @@ types {
         image/x-icon                                    ico;
         image/x-jng                                     jng;
         image/x-exr                                     exr;
-        image/vnd.wap.wbmp                              wbmp;
-        image/vnd.dwg                                   dwg;
-        image/vnd.dxf                                   dxf;
-        image/vnd.adobe.photoshop                       psd;
 
         application/javascript                          js jsonp;
         application/json                                json;
+		application/ld+json								jsonld;
         application/annodex                             anx;
         application/ogg                                 ogx;
         application/java-archive                        jar war ear;
         application/rtf                                 rtf;
         application/kate                                kate;
-        application/oda                                 oda;
         application/pdf                                 pdf;
-        application/postscript                          ps eps ai;
+        application/postscript                          ps eps;
         application/mathematica                         nb ma mb;
-        application/mac-binhex40                        hqx;
+        application/sql									sql;
+		application/vcard								vcf vcard;
         application/zip                                 zip;
+
         application/xml                                 xbl xsl xslt;
         application/atom+xml                            atom;
+        application/auth-policy+xml						apxml;
+		application/cellml+xml							cellml;
         application/rss+xml                             rss;
+        application/its+xml								its;
+        application/mets+xml							mets;
+        application/mml+xml								mml;
+        application/pls+xml								pls;
+        application/rdf+xml								rdf;
+        application/sbml+xml							sbml;
+        application/soap+xml							soap wsdl;
+        application/ttml+xml							ttml;
         application/xaml+xml                            xaml;
         application/xspf+xml                            xspf;
         application/calendar+xml                        xcs;
+        
+        application/pgp-encrypted						pgp-encrypted;
+        application/pgp-signature						pgp-signature;
+        application/ocsp-request						ocsp-request;
+        application/ocsp-response						ocsp-response;
 
-        application/vnd.apple.mpegurl                   m3u m3u8;
-        vnd.apple.installer+xml                         dist distz pkg mpkg;
-        application/vnd.ms-xpsdocument                  xps;
-        application/vnd.wap.wmlc                        wmlc;
-        application/vnd.google-earth.kml+xml            kml;
-        application/vnd.google-earth.kmz                kmz;
-        application/vnd.wolfram.cdf                     cdf;
-        application/vnd.iccprofile                      icc icm;
-        application/vnd.cip4-jdf+xml                    jdf;
-        application/vnd.cip4-jmf+xml                    jmf;
         application/x-cgi                               cgi;
         application/x-bittorrent                        torrent;
         application/x-cocoa                             cco;
@@ -126,7 +126,6 @@ types {
         audio/x-aac                                     aac;
         audio/x-m4a                                     m4a;
         audio/x-m4b                                     m4b;
-        audio/x-realaudio                               ra;
         audio/x-wav                                     wav bwf;
         video/3gpp                                      3gpp 3gp;
         audio/3gpp2                                     3g2 3gp2;
@@ -155,6 +154,21 @@ types {
         model/vnd.dwf                                   dwf;
 
         multipart/related                               mjd mjm;
+        
+        application/vnd.apple.mpegurl                   m3u m3u8;
+        application/vnd.apple.installer+xml             dist distz pkg mpkg;
+        application/vnd.ms-xpsdocument                  xps;
+        application/vnd.wap.wmlc                        wmlc;
+        application/vnd.google-earth.kml+xml            kml;
+        application/vnd.google-earth.kmz                kmz;
+        application/vnd.wolfram.cdf                     cdf;
+        application/vnd.iccprofile                      icc icm;
+        application/vnd.cip4-jdf+xml                    jdf;
+        application/vnd.cip4-jmf+xml                    jmf;
+        
+        image/vnd.dwg                                   dwg;
+        image/vnd.dxf                                   dxf;
+        image/vnd.adobe.photoshop                       psd;
 
         application/msword                                                                      doc;
         application/vnd.ms-excel                                                                xls;

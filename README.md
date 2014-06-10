@@ -8,9 +8,10 @@ Configuration files for:
 1. Percona Server
 2. nginx
 3. php-fpm
-4. vsftp
 5. memcached
 6. redis
+7. ntp
+8. iptables
 
 
 ##Timezone
@@ -24,8 +25,8 @@ ln -s /usr/share/zoneinfo/$TZ /etc/localtime
 
 ##Create User Variables
 ```
-APP_USER="appusername"; export APP_USER
-APP_DOMAIN="appdomain.com"; export APP_DOMAIN
+echo -e "APP_USER='appusername'; export APP_USER" >> ~/.bash_profile
+echo -e "APP_DOMAIN='appdomain.com'; export APP_DOMAIN" >> ~/.bash_profile
 ```
 
 ##Enable Repositories
@@ -35,8 +36,8 @@ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
 ```
 ```
-sed -i "s/enable=0/enable=1/" /etc/yum.repos.d/epel.repo
-sed -i "s/enable=0/enable=1/" /etc/yum.repos.d/remi.repo
+sed -i '0,/enabled=0/s//enabled=1/' /etc/yum.repos.d/epel.repo
+sed -i '0,/enabled=0/s//enabled=1/' /etc/yum.repos.d/remi.repo
 sed -i "s/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-remi/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-remi\nexclude=mysql-*/" /etc/yum.repos.d/remi.repo
 ```
 
@@ -132,11 +133,43 @@ cd ~/git
 git clone https://github.com/MikeWilkie/EPEL-LEPP-Configuration
 ```
 
-##openssl (if openssl version < 1.01)
+##ramfs
+
+```
+mkdir /mnt/{zoom_pagecache,ngx_pgspd_meta,ngx_pgspd_file}
+chown -R nobody:nobody /mnt/*
+chmod -R 777 /mnt/*
+```
+```
+echo 'none            /mnt/zoom_pagecache     ramfs nodev,nosuid,size=64M,mode=1777 0 0' >> /etc/fstab
+cat /etc/fstab
+echo 'none            /mnt/ngx_pgspd_meta     ramfs nodev,nosuid,size=64M,mode=1777 0 0' >> /etc/fstab
+cat /etc/fstab
+echo 'none            /mnt/ngx_pgspd_file     ramfs nodev,nosuid,size=64M,mode=1777 0 0' >> /etc/fstab
+cat /etc/fstab
+```
+```
+mount -a
+```
+
+
+##openssl
 
 ```
 rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
-yum --enablerepo=axivo update openssl
+sed -i '0,/enabled=0/s//enabled=1/' /etc/yum.repos.d/axivo.repo
+sed -i "s/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-AXIVO/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-AXIVO\nincludepkgs=openssl*/" /etc/yum.repos.d/axivo.repo
+yum install openssl-libs openssl-devel openssl-static
+yum update openssl-libs openssl-devel openssl-static
+yum install openssl
+yum update openssl
+```
+
+##lua (required for certain nginx modules)
+
+```
+yum install lua lua-devel lua-static luarocks 
+luarocks install lua-cjson
 ```
 
 ##nginx
@@ -144,33 +177,36 @@ yum --enablerepo=axivo update openssl
 ```
 mkdir ~/git/nginx
 cd ~/git/nginx
-wget http://nginx.org/download/nginx-1.5.8.tar.gz
-tar -xzvf nginx-1.5.8.tar.gz
-rm -rf nginx-1.5.8.tar.gz
-
+wget http://nginx.org/download/nginx-1.7.1.tar.gz
+tar -xzvf nginx-1.7.1.tar.gz
+rm -rf nginx-1.7.1.tar.gz
 ```
 ```
-cd ~/git/nginx
-wget http://www.openssl.org/source/openssl-1.0.1e.tar.gz
-tar xzvf openssl* && rm -rf openssl-1.0.1e.tar.gz
-```
-```
-
-git clone git://github.com/pagespeed/ngx_pagespeed.git
+NGX_PAGESPEED_VERSION=$(git describe --abbrev=0 --tags)
+export NGX_PAGESPEED_VERSION
+mkdir ngx_pagespeed
 cd ngx_pagespeed
-wget https://dl.google.com/dl/page-speed/psol/1.7.30.1.tar.gz
-tar -xzvf 1.7.30.1.tar.gz
-rm -rf 1.7.30.1.tar.gz
+git clone -b $NGX_PAGESPEED_VERSION git://github.com/pagespeed/ngx_pagespeed.git
+cd ngx_pagespeed
+PSOL_DL=$(grep -o 'https:\/\/dl\.google\.com/dl\/page-speed\/psol\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]\.gz' README.md)
+export PSOL_DL
+wget $PSOL_DL
+tar -xzvf *.tar.gz
+rm -rf *.tar.gz
 ```
 ```
 cd ~/git/nginx
+
 git clone git://github.com/agentzh/headers-more-nginx-module.git
-wget http://people.FreeBSD.org/~osa/ngx_http_redis-0.3.7.tar.gz
-tar -xzvf ngx_http_redis-0.3.7.tar.gz
-rm -rf ngx_http_redis-0.3.7.tar.gz
+git clone git://github.com/agentzh/echo-nginx-module.git
+git clone git://github.com/openresty/srcache-nginx-module.git
+git clone git://github.com/openresty/lua-nginx-module.git
+git clone git://github.com/bpaquet/ngx_http_enhanced_memcached_module.git
+git clone git://github.com/HoopCHINA/ngx_http_redis.git
+git clone git://github.com/anomalizer/ngx_aws_auth.git
+git clone git://github.com/simpl/ngx_auto_lib.git
 ```
-```
-cd ~/git/nginx/nginx-1.5.8
+cd ~/git/nginx/nginx-1.7.1
 ```
 ```
 ./configure \
@@ -182,8 +218,7 @@ cd ~/git/nginx/nginx-1.5.8
 --error-log-path=/var/log/nginx/error.log \
 --http-log-path=/var/log/nginx/access.log \
 --user=nginx \
---group=www-data \
---with-openssl=$HOME/git/nginx/openssl-1.0.1e \
+--group=nginx \
 --with-google_perftools_module \
 --with-http_ssl_module \
 --with-http_secure_link_module \
@@ -213,8 +248,14 @@ cd ~/git/nginx/nginx-1.5.8
 --without-mail_imap_module \
 --without-mail_smtp_module \
 --add-module=$HOME/git/nginx/headers-more-nginx-module \
+--add-module=$HOME/git/nginx/echo-nginx-module \
+--add-module=$HOME/git/nginx/lua-nginx-module \
+--add-module=$HOME/git/nginx/srcache-nginx-module \
+--add-module=$HOME/git/nginx/ngx_http_enhanced_memcached_module \
+--add-module=$HOME/git/nginx/ngx_http_redis \
 --add-module=$HOME/git/nginx/ngx_pagespeed \
---add-module=$HOME/git/nginx/ngx_http_redis-0.3.7
+--add-module=$HOME/git/nginx/ngx_aws_auth \
+--add-module=$HOME/git/nginx/ngx_auto_lib
 ```
 ```
 make && make install
@@ -251,7 +292,7 @@ chown -R $APP_USER:$APP_USER /var/www/$APP_DOMAIN/
 chmod -R o+wrx /var/www/$APP_DOMAIN/tmp
 chmod 700 /var/www/$APP_DOMAIN/.ssh
 chmod 600 /var/www/$APP_DOMAIN/.ssh/authorized_keys
-echo -e "$APP_USER ALL=(ALL) ALL" >> /etc/sudoers
+echo -e "$APP_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 ```
 ```
 rm -rf /etc/nginx/conf.d/*
@@ -272,14 +313,10 @@ cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/nginx /etc/init.d/
 ```
 ```
 mv /etc/nginx/conf.d/domain.conf /etc/nginx/conf.d/$APP_DOMAIN.conf
-<<<<<<< HEAD
 mv /etc/nginx/conf.d/domain.ssl.conf.bk /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk
 sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/g' /etc/nginx/conf.d/$APP_DOMAIN.conf
 sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/g' /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk
 sed -i 's/$VAR_USER/'$APP_USER'/g' /etc/nginx/nginx.conf
-=======
-sed -i 's/$VAR_DOMAIN/$APP_DOMAIN/' /etc/nginx/conf.d/$APP_DOMAIN.conf
->>>>>>> 24023366651a35488f39d33ee390ff96f290728c
 ```
 ```
 chmod -R 755 /etc/init.d/nginx
@@ -296,12 +333,12 @@ vim /etc/nginx/ssl.d/$APP_DOMAIN.crt
 vim /etc/nginx/ssl.d/chain.ca.crt
 ```
 ```
-cat /etc/nginx/ssl.d/chain.ca.crt >> /etc/nginx/ssl.d/$APP_DOMAIN.crt
-<<<<<<< HEAD
+cat /etc/nginx/ssl.d/chain.ca.crt /etc/nginx/ssl.d/$APP_DOMAIN.crt > trusted.crt;
 mv /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf
-=======
 sed -i "s/#listen;/ listen/" /etc/nginx/conf.d/$APP_DOMAIN.conf
->>>>>>> 24023366651a35488f39d33ee390ff96f290728c
+```
+```
+openssl dhparam -out /etc/nginx/ssl.d/dhparam.pem 2048
 ```
 
 ##php-fpm
@@ -365,7 +402,6 @@ chmod -R 755 /var/log/php-fpm
 chmod -R 755 /var/run/php-fpm
 ```
 ```
-```
 rm -rf /etc/php-fpm.d/*
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php.ini /etc/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php-fpm.d/www.conf /etc/php-fpm.d/
@@ -376,17 +412,17 @@ cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/php.d/memcache.ini /etc/php.d/memca
 cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/php-fpm /etc/init.d/
 
 ```
-<<<<<<< HEAD
+```
 mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/$APP_DOMAIN.conf
 sed -i 's/$VAR_USER/'$APP_USER'/' /etc/php-fpm.conf
 sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/' /etc/php-fpm.d/$APP_DOMAIN.conf
 sed -i 's/$VAR_USER/'$APP_USER'/' /etc/php-fpm.d/$APP_DOMAIN.conf
-=======
+
+```
 ```
 mv /etc/php-fpm.d/www.conf /etc/php-fpm.d/$APP_DOMAIN.conf
 sed -i 's/$VAR_USER/$APP_USER/' /etc/php-fpm.conf
 sed -i 's/$VAR_DOMAIN/$APP_DOMAIN/' /etc/php-fpm.d/$APP_DOMAIN.conf
->>>>>>> 24023366651a35488f39d33ee390ff96f290728c
 ```
 ```
 chmod -R 755 /etc/init.d/php-fpm
@@ -430,20 +466,6 @@ mysql_secure_installation
 chkconfig mysql on
 ```
 
-##vsFTP
-```
-yum install vsftpd -y
-```
-```
-mv /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.bak
-cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/vsftpd/vsftpd.conf /etc/vsftpd/
-chmod -R 755 /etc/init.d/vsftpd
-```
-```
-service vsftpd start
-chkconfig vsftpd on
-```
-
 ##memcached
 
 ```
@@ -462,19 +484,15 @@ chmod -R 755 /var/run/memcached
 ```
 ```
 sed -i 's/PORT=.*/PORT="11211"/' /etc/sysconfig/memcached
-<<<<<<< HEAD
-sed -i 's/USER=.*/USER="'$APP_USER'"/' /etc/sysconfig/memcached
-=======
-sed -i 's/USER=.*/"$APP_USER"/' /etc/sysconfig/memcached
->>>>>>> 24023366651a35488f39d33ee390ff96f290728c
+sed -i 's/USER=.*/"nobody"/' /etc/sysconfig/memcached
 sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/sysconfig/memcached
-sed -i 's/CACHESIZE=.*/CACHESIZE="512"/' /etc/sysconfig/memcached
-sed -i 's/OPTIONS=.*/OPTIONS="-l 127.0.0.1 -a 0777"/' /etc/sysconfig/memcached
+sed -i 's/CACHESIZE=.*/CACHESIZE="128"/' /etc/sysconfig/memcached
+sed -i 's/OPTIONS=.*/OPTIONS="-l 127.0.0.1"/' /etc/sysconfig/memcached
 sed -i 's/PORT=.*/PORT="11211"/' /etc/init.d/memcached
-sed -i 's/USER=.*/USER="'$APP_USER'"/' /etc/init.d/memcached
+sed -i 's/USER=.*/USER="nobody"/' /etc/init.d/memcached
 sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/init.d/memcached
-sed -i 's/CACHESIZE=.*/CACHESIZE="512"/' /etc/init.d/memcached
-sed -i 's/OPTIONS=.*/OPTIONS="-l 127.0.0.1 -a 0777"/' /etc/init.d/memcached
+sed -i 's/CACHESIZE=.*/CACHESIZE="128"/' /etc/init.d/memcached
+sed -i 's/OPTIONS=.*/OPTIONS="-l 127.0.0.1"/' /etc/init.d/memcached
 ```
 ```
 chmod -R 755 /etc/init.d/memcached
@@ -494,9 +512,9 @@ mv /etc/redis.conf /etc/redis.conf.bak
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/redis.conf /etc/
 ```
 ```
-chmod -R 755 /etc/init.d/redis
-service redis start
-chkconfig redis on
+chmod -R 755 /etc/init.d/redis-server
+service redis-server start
+chkconfig redis-server on
 ```
 
 ##ntp
@@ -510,4 +528,30 @@ ntp \
 ntpdate pool.ntp.org
 service ntpd start
 chkconfig ntpd on
+```
+
+##iptables
+
+```
+iptables -F
+iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp -m multiport --dports 22,53,80,443 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp -m multiport --sports 22,53,80,443 -m state --state ESTABLISHED -j ACCEPT
+iptables -I INPUT -p udp --dport 123 -j ACCEPT
+iptables -I OUTPUT -p udp --sport 123 -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+iptables -I INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -L -n
+iptables-save | tee /etc/sysconfig/iptables
+service iptables restart
 ```

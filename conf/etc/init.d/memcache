@@ -13,10 +13,10 @@
 . /etc/init.d/functions
 
 PORT="11211"
-USER="nginx"
+USER="nobody"
 MAXCONN="1024"
-CACHESIZE="512"
-OPTIONS="-s /var/run/memcached/memcached.sock -a 0777"
+CACHESIZE="128"
+OPTIONS="-l 127.0.0.1"
 
 if [ -f /etc/sysconfig/memcached ];then 
         . /etc/sysconfig/memcached
