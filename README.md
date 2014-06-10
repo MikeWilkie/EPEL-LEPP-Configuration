@@ -136,6 +136,7 @@ git clone https://github.com/MikeWilkie/EPEL-LEPP-Configuration
 ##ramfs
 
 ```
+<<<<<<< HEAD
 mkdir /mnt/{zoom_pagecache,ngx_pgspd_meta,ngx_pgspd_file}
 chown -R nobody:nobody /mnt/*
 chmod -R 777 /mnt/*
@@ -150,12 +151,18 @@ cat /etc/fstab
 ```
 ```
 mount -a
+=======
+rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
+yum --enablerepo=axivo update openssl-libs openssl-devel
+yum --enablerepo=axivo install openssl
+>>>>>>> FETCH_HEAD
 ```
 
 
 ##openssl
 
 ```
+<<<<<<< HEAD
 rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
 sed -i '0,/enabled=0/s//enabled=1/' /etc/yum.repos.d/axivo.repo
 sed -i "s/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-AXIVO/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-AXIVO\nincludepkgs=openssl*/" /etc/yum.repos.d/axivo.repo
@@ -166,6 +173,13 @@ yum update openssl
 ```
 
 ##lua (required for certain nginx modules)
+=======
+mkdir ~/git/nginx
+cd ~/git/nginx
+wget http://nginx.org/download/nginx-1.5.12.tar.gz
+tar -xzvf nginx-1.5.12.tar.gz
+rm -rf nginx-1.5.12.tar.gz
+>>>>>>> FETCH_HEAD
 
 ```
 yum install lua lua-devel lua-static luarocks 
@@ -177,9 +191,14 @@ luarocks install lua-cjson
 ```
 mkdir ~/git/nginx
 cd ~/git/nginx
+<<<<<<< HEAD
 wget http://nginx.org/download/nginx-1.7.1.tar.gz
 tar -xzvf nginx-1.7.1.tar.gz
 rm -rf nginx-1.7.1.tar.gz
+=======
+wget https://www.openssl.org/source/openssl-1.0.1f.tar.gz
+tar xzvf openssl* && rm -rf openssl-1.0.1f.tar.gz
+>>>>>>> FETCH_HEAD
 ```
 ```
 NGX_PAGESPEED_VERSION=$(git describe --abbrev=0 --tags)
@@ -188,11 +207,17 @@ mkdir ngx_pagespeed
 cd ngx_pagespeed
 git clone -b $NGX_PAGESPEED_VERSION git://github.com/pagespeed/ngx_pagespeed.git
 cd ngx_pagespeed
+<<<<<<< HEAD
 PSOL_DL=$(grep -o 'https:\/\/dl\.google\.com/dl\/page-speed\/psol\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]\.gz' README.md)
 export PSOL_DL
 wget $PSOL_DL
 tar -xzvf *.tar.gz
 rm -rf *.tar.gz
+=======
+wget https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz
+tar -xzvf 1.7.30.4.tar.gz
+rm -rf 1.7.30.4.tar.gz
+>>>>>>> FETCH_HEAD
 ```
 ```
 cd ~/git/nginx
@@ -206,7 +231,11 @@ git clone git://github.com/HoopCHINA/ngx_http_redis.git
 git clone git://github.com/anomalizer/ngx_aws_auth.git
 git clone git://github.com/simpl/ngx_auto_lib.git
 ```
+<<<<<<< HEAD
 cd ~/git/nginx/nginx-1.7.1
+=======
+cd ~/git/nginx/nginx-1.5.12
+>>>>>>> FETCH_HEAD
 ```
 ```
 ./configure \
@@ -218,7 +247,12 @@ cd ~/git/nginx/nginx-1.7.1
 --error-log-path=/var/log/nginx/error.log \
 --http-log-path=/var/log/nginx/access.log \
 --user=nginx \
+<<<<<<< HEAD
 --group=nginx \
+=======
+--group=www-data \
+--with-openssl=$HOME/git/nginx/openssl-1.0.1f \
+>>>>>>> FETCH_HEAD
 --with-google_perftools_module \
 --with-http_ssl_module \
 --with-http_secure_link_module \
@@ -484,7 +518,12 @@ chmod -R 755 /var/run/memcached
 ```
 ```
 sed -i 's/PORT=.*/PORT="11211"/' /etc/sysconfig/memcached
+<<<<<<< HEAD
 sed -i 's/USER=.*/"nobody"/' /etc/sysconfig/memcached
+=======
+sed -i 's/USER=.*/USER="'$APP_USER'"/' /etc/sysconfig/memcached
+sed -i 's/USER=.*/"$APP_USER"/' /etc/sysconfig/memcached
+>>>>>>> FETCH_HEAD
 sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/sysconfig/memcached
 sed -i 's/CACHESIZE=.*/CACHESIZE="128"/' /etc/sysconfig/memcached
 sed -i 's/OPTIONS=.*/OPTIONS="-l 127.0.0.1"/' /etc/sysconfig/memcached
