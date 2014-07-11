@@ -180,27 +180,23 @@ luarocks install lua-cjson -y
 ```
 mkdir ~/git/nginx
 cd ~/git/nginx
-wget http://nginx.org/download/nginx-1.7.1.tar.gz
-tar -xzvf nginx-1.7.1.tar.gz
-rm -rf nginx-1.7.1.tar.gz
-wget https://www.openssl.org/source/openssl-1.0.1f.tar.gz
-tar xzvf openssl* && rm -rf openssl-1.0.1f.tar.gz
+wget http://nginx.org/download/nginx-1.7.2.tar.gz
+tar -xzvf nginx-1*.tar.gz
+rm -rf nginx-1*.tar.gz
+wget https://www.openssl.org/source/openssl-1.0.1h.tar.gz
+tar xzvf openssl* && rm -rf openssl-1.0.1h.tar.gz
 ```
 ```
+cd ~/git/nginx
+git clone git://github.com/pagespeed/ngx_pagespeed.git
+cd ~/git/nginx/ngx_pagespeed
 NGX_PAGESPEED_VERSION=$(git describe --abbrev=0 --tags)
 export NGX_PAGESPEED_VERSION
-mkdir ngx_pagespeed
-cd ngx_pagespeed
-git clone -b $NGX_PAGESPEED_VERSION git://github.com/pagespeed/ngx_pagespeed.git
-cd ngx_pagespeed
 PSOL_DL=$(grep -o 'https:\/\/dl\.google\.com/dl\/page-speed\/psol\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]\.gz' README.md)
 export PSOL_DL
 wget $PSOL_DL
 tar -xzvf *.tar.gz
 rm -rf *.tar.gz
-wget https://dl.google.com/dl/page-speed/psol/1.7.30.4.tar.gz
-tar -xzvf 1.7.30.4.tar.gz
-rm -rf 1.7.30.4.tar.gz
 ```
 ```
 cd ~/git/nginx
@@ -214,8 +210,7 @@ git clone git://github.com/HoopCHINA/ngx_http_redis.git
 git clone git://github.com/anomalizer/ngx_aws_auth.git
 git clone git://github.com/simpl/ngx_auto_lib.git
 ```
-cd ~/git/nginx/nginx-1.7.1
-cd ~/git/nginx/nginx-1.5.12
+cd ~/git/nginx/nginx-1*
 ```
 ```
 ./configure \
@@ -229,7 +224,7 @@ cd ~/git/nginx/nginx-1.5.12
 --user=nginx \
 --group=nginx \
 --group=www-data \
---with-openssl=$HOME/git/nginx/openssl-1.0.1f \
+--with-openssl=$HOME/git/nginx/openssl-1.0.1h \
 --with-google_perftools_module \
 --with-http_ssl_module \
 --with-http_secure_link_module \
@@ -326,7 +321,6 @@ cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/nginx /etc/init.d/
 mv /etc/nginx/conf.d/domain.conf /etc/nginx/conf.d/$APP_DOMAIN.conf
 mv /etc/nginx/conf.d/domain.ssl.conf.bk /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk
 sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/g' /etc/nginx/conf.d/$APP_DOMAIN.conf
-sed -i 's/$VAR_DOMAIN/'$APP_DOMAIN'/g' /etc/nginx/conf.d/$APP_DOMAIN.ssl.conf.bk
 sed -i 's/$VAR_USER/'$APP_USER'/g' /etc/nginx/nginx.conf
 ```
 ```
@@ -420,7 +414,6 @@ cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/php-fpm.conf /etc/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/php-fpm /etc/init.d/
 cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/php.d/opcache.ini /etc/php.d/opcache.ini
 cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/php.d/memcache.ini /etc/php.d/memcache.ini
-cp -r ~/git/EPEL-LEPP-Configuration/conf/etc/init.d/php-fpm /etc/init.d/
 
 ```
 ```
@@ -496,16 +489,9 @@ chmod -R 755 /var/run/memcached
 ```
 sed -i 's/PORT=.*/PORT="11211"/' /etc/sysconfig/memcached
 sed -i 's/USER=.*/"nobody"/' /etc/sysconfig/memcached
-sed -i 's/USER=.*/USER="'$APP_USER'"/' /etc/sysconfig/memcached
-sed -i 's/USER=.*/"$APP_USER"/' /etc/sysconfig/memcached
 sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/sysconfig/memcached
 sed -i 's/CACHESIZE=.*/CACHESIZE="128"/' /etc/sysconfig/memcached
 sed -i 's/OPTIONS=.*/OPTIONS="-l 127.0.0.1"/' /etc/sysconfig/memcached
-sed -i 's/PORT=.*/PORT="11211"/' /etc/init.d/memcached
-sed -i 's/USER=.*/USER="nobody"/' /etc/init.d/memcached
-sed -i 's/MAXCONN=.*/MAXCONN="2048"/' /etc/init.d/memcached
-sed -i 's/CACHESIZE=.*/CACHESIZE="128"/' /etc/init.d/memcached
-sed -i 's/OPTIONS=.*/OPTIONS="-l 127.0.0.1"/' /etc/init.d/memcached
 ```
 ```
 chmod -R 755 /etc/init.d/memcached
