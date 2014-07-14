@@ -164,12 +164,13 @@ yum update openssl -y
 ```
 
 ##lua (required for certain nginx modules)
+```
 mkdir ~/git/nginx
 cd ~/git/nginx
 wget http://nginx.org/download/nginx-1.5.12.tar.gz
 tar -xzvf nginx-1.5.12.tar.gz
 rm -rf nginx-1.5.12.tar.gz
-
+```
 ```
 yum install lua lua-devel lua-static luarocks 
 luarocks install lua-cjson -y
@@ -209,7 +210,7 @@ git clone git://github.com/bpaquet/ngx_http_enhanced_memcached_module.git
 git clone git://github.com/HoopCHINA/ngx_http_redis.git
 git clone git://github.com/anomalizer/ngx_aws_auth.git
 git clone git://github.com/simpl/ngx_auto_lib.git
-```
+
 cd ~/git/nginx/nginx-1*
 ```
 ```
