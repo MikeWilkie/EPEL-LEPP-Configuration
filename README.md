@@ -32,7 +32,6 @@ echo -e "APP_DOMAIN='appdomain.com'; export APP_DOMAIN" >> ~/.bash_profile
 ```
 rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
 rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
-rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
 ```
 ```
 sed -i '0,/enabled=0/s//enabled=1/' /etc/yum.repos.d/epel.repo
@@ -165,15 +164,12 @@ yum update openssl -y
 
 ##lua (required for certain nginx modules)
 ```
-mkdir ~/git/nginx
-cd ~/git/nginx
-wget http://nginx.org/download/nginx-1.5.12.tar.gz
-tar -xzvf nginx-1.5.12.tar.gz
-rm -rf nginx-1.5.12.tar.gz
-```
-```
-yum install lua lua-devel lua-static luarocks
-luarocks install lua-cjson -y
+yum install lua \
+lua-devel \
+lua-static \
+luarocks \
+-y
+luarocks install lua-cjson
 ```
 
 ##nginx
@@ -196,8 +192,6 @@ export NGX_PAGESPEED_VERSION
 PSOL_DL=$(grep -o 'https:\/\/dl\.google\.com/dl\/page-speed\/psol\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]\.gz' README.md)
 export PSOL_DL
 wget $PSOL_DL
-tar -xzvf *.tar.gz
-rm -rf *.tar.gz
 ```
 ```
 cd ~/git/nginx
@@ -438,11 +432,12 @@ chkconfig php-fpm on
 ##Percona Server (MySQL)
 
 ```
+rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
 yum install \
-Percona-Server-client-55 \
-Percona-Server-server-55 \
-Percona-Server-shared-55 \
-Percona-Server-devel-55 \
+Percona-Server-client-56 \
+Percona-Server-server-56 \
+Percona-Server-shared-56 \
+Percona-Server-devel-56 \
 Percona-Server-shared-compat \
 percona-toolkit \
 percona-xtrabackup \
