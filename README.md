@@ -432,10 +432,10 @@ chkconfig php-fpm on
 
 ```
 yum install \
-Percona-Server-client-55 \
-Percona-Server-server-55 \
-Percona-Server-shared-55 \
-Percona-Server-devel-55 \
+Percona-Server-client-56 \
+Percona-Server-server-56 \
+Percona-Server-shared-56 \
+Percona-Server-devel-56 \
 Percona-Server-shared-compat \
 percona-toolkit \
 percona-xtrabackup \
