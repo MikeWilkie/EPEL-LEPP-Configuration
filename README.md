@@ -169,7 +169,7 @@ lua-devel \
 lua-static \
 luarocks \
 -y
-luarocks install lua-cjson -y
+luarocks install lua-cjson
 ```
 
 ##nginx
