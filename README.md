@@ -165,13 +165,6 @@ yum update openssl -y
 
 ##lua (required for certain nginx modules)
 ```
-mkdir ~/git/nginx
-cd ~/git/nginx
-wget http://nginx.org/download/nginx-1.5.12.tar.gz
-tar -xzvf nginx-1.5.12.tar.gz
-rm -rf nginx-1.5.12.tar.gz
-```
-```
 yum install lua lua-devel lua-static luarocks 
 luarocks install lua-cjson -y
 ```
@@ -181,7 +174,7 @@ luarocks install lua-cjson -y
 ```
 mkdir ~/git/nginx
 cd ~/git/nginx
-wget http://nginx.org/download/nginx-1.7.2.tar.gz
+wget http://nginx.org/download/nginx-1.7.3.tar.gz
 tar -xzvf nginx-1*.tar.gz
 rm -rf nginx-1*.tar.gz
 wget https://www.openssl.org/source/openssl-1.0.1h.tar.gz
