@@ -164,7 +164,11 @@ yum update openssl -y
 
 ##lua (required for certain nginx modules)
 ```
-yum install lua lua-devel lua-static luarocks 
+yum install lua \
+lua-devel \
+lua-static \
+luarocks \
+-y
 luarocks install lua-cjson -y
 ```
 
