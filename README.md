@@ -157,9 +157,8 @@ mount -a
 rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
 sed -i '0,/enabled=0/s//enabled=1/' /etc/yum.repos.d/axivo.repo
 sed -i "s/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-AXIVO/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-AXIVO\nincludepkgs=openssl*/" /etc/yum.repos.d/axivo.repo
-yum install openssl-libs openssl-devel openssl-static -y
-yum update openssl-libs openssl-devel openssl-static -y
-yum update openssl -y
+yum install openssl openssl-libs openssl-devel openssl-static -y
+yum update openssl openssl-libs openssl-devel openssl-static -y
 ```
 
 ##lua (required for certain nginx modules)
