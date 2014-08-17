@@ -187,7 +187,9 @@ cd ~/git/nginx
 git clone git://github.com/pagespeed/ngx_pagespeed.git
 cd ~/git/nginx/ngx_pagespeedNGX_PAGESPEED_VERSION=$(git describe --abbrev=0 --tags)
 NGX_PAGESPEED_VERSION=${NGX_PAGESPEED_VERSION/v/}
-wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${NGX_PAGESPEED_VERSION}.zip
+NGX_PAGESPEED_VERSION=${NGX_PAGESPEED_VERSION/-beta/}
+wget https://dl.google.com/dl/page-speed/psol/${NGX_PAGESPEED_VERSION}.tar.gz
+tar -xzvf ${NGX_PAGESPEED_VERSION}.tar.gz
 ```
 ```
 cd ~/git/nginx
