@@ -185,7 +185,8 @@ tar xzvf openssl* && rm -rf openssl-1.0.1i.tar.gz
 ```
 cd ~/git/nginx
 git clone git://github.com/pagespeed/ngx_pagespeed.git
-cd ~/git/nginx/ngx_pagespeedNGX_PAGESPEED_VERSION=$(git describe --abbrev=0 --tags)
+cd ~/git/nginx/ngx_pagespeed
+NGX_PAGESPEED_VERSION=$(git describe --abbrev=0 --tags)
 NGX_PAGESPEED_VERSION=${NGX_PAGESPEED_VERSION/v/}
 NGX_PAGESPEED_VERSION=${NGX_PAGESPEED_VERSION/-beta/}
 wget https://dl.google.com/dl/page-speed/psol/${NGX_PAGESPEED_VERSION}.tar.gz
