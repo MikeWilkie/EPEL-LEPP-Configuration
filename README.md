@@ -431,7 +431,7 @@ chkconfig php-fpm on
 ##Percona Server (MySQL)
 
 ```
-rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
+rpm -ivh http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
 yum install \
 Percona-Server-client-56 \
 Percona-Server-server-56 \
