@@ -303,8 +303,8 @@ cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/conf.d/domain.conf /etc/nginx
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/conf.d/domain.ssl.conf.bk /etc/nginx/conf.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/gzip.conf /etc/nginx/speed.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/cors.conf /etc/nginx/speed.d/
-cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/headers-cache.conf /etc/nginx/speed.d/
-cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/headers-nocache.conf /etc/nginx/speed.d/
+cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/cache.conf /etc/nginx/speed.d/
+cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/nocache.conf /etc/nginx/speed.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/pagespeed.conf /etc/nginx/speed.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/speed.d/pagespeed-server.conf /etc/nginx/speed.d/
 cp -f ~/git/EPEL-LEPP-Configuration/conf/etc/nginx/ssl.d/ssl.conf /etc/nginx/ssl.d/
