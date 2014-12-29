@@ -154,7 +154,7 @@ mount -a
 ##openssl
 
 ```
-rpm -ivh --nosignature http://rpm.axivo.com/redhat/axivo-release-6-1.noarch.rpm
+rpm -ivh --nosignature http://rpm.axivo.com/axivo-release-6-1.noarch.rpm
 sed -i '0,/enabled=0/s//enabled=1/' /etc/yum.repos.d/axivo.repo
 sed -i "s/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-AXIVO/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-AXIVO\nincludepkgs=openssl*/" /etc/yum.repos.d/axivo.repo
 yum install openssl openssl-libs openssl-devel openssl-static -y
@@ -176,7 +176,7 @@ luarocks install lua-cjson
 ```
 mkdir ~/git/nginx
 cd ~/git/nginx
-wget http://nginx.org/download/nginx-1.7.7.tar.gz
+wget http://nginx.org/download/nginx-1.7.8.tar.gz
 tar -xzvf nginx-1*.tar.gz
 rm -rf nginx-1*.tar.gz
 wget https://www.openssl.org/source/openssl-1.0.1j.tar.gz
