@@ -239,7 +239,6 @@ cd ~/git/nginx/nginx-1*
 --with-http_perl_module \
 --with-poll_module \
 --with-select_module \
---with-rtsig_module \
 --with-libatomic \
 --with-file-aio \
 --with-ipv6 \
