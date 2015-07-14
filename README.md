@@ -176,11 +176,11 @@ luarocks install lua-cjson
 ```
 mkdir ~/git/nginx
 cd ~/git/nginx
-wget http://nginx.org/download/nginx-1.7.8.tar.gz
+wget http://nginx.org/download/nginx-1.9.2.tar.gz
 tar -xzvf nginx-1*.tar.gz
 rm -rf nginx-1*.tar.gz
-wget https://www.openssl.org/source/openssl-1.0.1j.tar.gz
-tar xzvf openssl* && rm -rf openssl-1.0.1j.tar.gz
+wget https://www.openssl.org/source/openssl-1.0.1p.tar.gz
+tar xzvf openssl* && rm -rf openssl-1.0.1p.tar.gz
 ```
 ```
 cd ~/git/nginx
@@ -218,7 +218,7 @@ cd ~/git/nginx/nginx-1*
 --user=nginx \
 --group=nginx \
 --group=www-data \
---with-openssl=$HOME/git/nginx/openssl-1.0.1j \
+--with-openssl=$HOME/git/nginx/openssl-1.0.1p \
 --with-google_perftools_module \
 --with-http_ssl_module \
 --with-http_secure_link_module \
