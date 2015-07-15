@@ -176,7 +176,7 @@ luarocks install lua-cjson
 ```
 mkdir ~/git/nginx
 cd ~/git/nginx
-wget http://nginx.org/download/nginx-1.9.2.tar.gz
+wget http://nginx.org/download/nginx-1.9.3.tar.gz
 tar -xzvf nginx-1*.tar.gz
 rm -rf nginx-1*.tar.gz
 wget https://www.openssl.org/source/openssl-1.0.1p.tar.gz
@@ -194,16 +194,7 @@ tar -xzvf ${NGX_PAGESPEED_VERSION}.tar.gz
 ```
 ```
 cd ~/git/nginx
-
 git clone git://github.com/agentzh/headers-more-nginx-module.git
-git clone git://github.com/agentzh/echo-nginx-module.git
-git clone git://github.com/openresty/srcache-nginx-module.git
-git clone git://github.com/openresty/lua-nginx-module.git
-git clone git://github.com/bpaquet/ngx_http_enhanced_memcached_module.git
-git clone git://github.com/HoopCHINA/ngx_http_redis.git
-git clone git://github.com/anomalizer/ngx_aws_auth.git
-git clone git://github.com/simpl/ngx_auto_lib.git
-
 cd ~/git/nginx/nginx-1*
 ```
 ```
@@ -247,14 +238,7 @@ cd ~/git/nginx/nginx-1*
 --without-mail_imap_module \
 --without-mail_smtp_module \
 --add-module=$HOME/git/nginx/headers-more-nginx-module \
---add-module=$HOME/git/nginx/echo-nginx-module \
---add-module=$HOME/git/nginx/lua-nginx-module \
---add-module=$HOME/git/nginx/srcache-nginx-module \
---add-module=$HOME/git/nginx/ngx_http_enhanced_memcached_module \
---add-module=$HOME/git/nginx/ngx_http_redis \
---add-module=$HOME/git/nginx/ngx_pagespeed \
---add-module=$HOME/git/nginx/ngx_aws_auth \
---add-module=$HOME/git/nginx/ngx_auto_lib
+--add-module=$HOME/git/nginx/ngx_pagespeed
 ```
 ```
 make && make install
