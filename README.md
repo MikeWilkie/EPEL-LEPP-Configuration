@@ -13,7 +13,7 @@ Configuration files for:
 8. iptables
 
 
-##Timezone
+## Timezone
 ```
 tzselect
 touch ~/.profile
@@ -22,13 +22,13 @@ mv /etc/localtime /etc/localtime.bak
 ln -s /usr/share/zoneinfo/$TZ /etc/localtime
 ```
 
-##Create User Variables
+## Create User Variables
 ```
 echo -e "APP_USER='appusername'; export APP_USER" >> ~/.bash_profile
 echo -e "APP_DOMAIN='appdomain.com'; export APP_DOMAIN" >> ~/.bash_profile
 ```
 
-##Enable Repositories
+## Enable Repositories
 ```
 rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
 rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
@@ -39,7 +39,7 @@ sed -i '0,/enabled=0/s//enabled=1/' /etc/yum.repos.d/remi.repo
 sed -i "s/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-remi/gpgkey=file:\/\/\/etc\/pki\/rpm-gpg\/RPM-GPG-KEY-remi\nexclude=mysql-*/" /etc/yum.repos.d/remi.repo
 ```
 
-##Core Packages
+## Core Packages
 
 ```
 yum update -y
@@ -106,7 +106,7 @@ wget \
 -y
 ```
 
-##User Tweaks
+## User Tweaks
 ```
 cd ~
 mkdir -p ~/.vim/autoload ~/.vim/bundle; \
@@ -131,7 +131,7 @@ cd ~/git
 git clone https://github.com/MikeWilkie/EPEL-LEPP-Configuration
 ```
 
-##ramfs
+## ramfs
 
 ```
 mkdir /mnt/{zoom_pagecache,ngx_pgspd_meta,ngx_pgspd_file}
@@ -151,7 +151,7 @@ mount -a
 ```
 
 
-##openssl
+## openssl
 
 ```
 rpm -ivh --nosignature http://rpm.axivo.com/axivo-release-6-1.noarch.rpm
@@ -161,7 +161,7 @@ yum install openssl openssl-libs openssl-devel openssl-static -y
 yum update openssl openssl-libs openssl-devel openssl-static -y
 ```
 
-##lua (required for certain nginx modules)
+## lua (required for certain nginx modules)
 ```
 yum install lua \
 lua-devel \
@@ -171,7 +171,7 @@ luarocks \
 luarocks install lua-cjson
 ```
 
-##nginx
+## nginx
 
 ```
 mkdir ~/git/nginx
@@ -306,7 +306,7 @@ service nginx start
 chkconfig nginx on
 ```
 
-##nginx-ssl
+## nginx-ssl
 
 ```
 cd /etc/nginx/ssl.d
@@ -323,7 +323,7 @@ sed -i "s/#listen;/ listen/" /etc/nginx/conf.d/$APP_DOMAIN.conf
 openssl dhparam -out /etc/nginx/ssl.d/dhparam.pem 2048
 ```
 
-##php-fpm
+## php-fpm
 
 ```
 yum install \
@@ -411,7 +411,7 @@ service php-fpm start
 chkconfig php-fpm on
 ```
 
-##Percona Server (MySQL)
+## Percona Server (MySQL)
 
 ```
 rpm -ivh http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
@@ -448,7 +448,7 @@ mysql_secure_installation
 chkconfig mysql on
 ```
 
-##memcached
+## memcached
 
 ```
 yum install \
@@ -477,7 +477,7 @@ service memcached start
 chkconfig memcached on
 ```
 
-##redis
+## redis
 
 ```
 yum install \
@@ -494,7 +494,7 @@ service redis-server start
 chkconfig redis-server on
 ```
 
-##ntp
+## ntp
 
 ```
 yum install \
@@ -507,7 +507,7 @@ service ntpd start
 chkconfig ntpd on
 ```
 
-##iptables
+## iptables
 
 ```
 iptables -F
